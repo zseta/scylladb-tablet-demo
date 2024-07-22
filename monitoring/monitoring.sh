@@ -20,4 +20,4 @@ sudo usermod -aG docker ubuntu
 sudo systemctl enable docker
 sudo systemctl start docker
 latest_branch=$(git ls-remote --heads https://github.com/scylladb/scylla-monitoring.git | grep 'refs/heads/branch-' | sort -t '-' -k 2,2V | tail -1 | awk '{print $2}' | cut -d '/' -f 3)
-git clone --branch master https://github.com/scylladb/scylla-monitoring.git
+git clone --branch $latest_branch https://github.com/scylladb/scylla-monitoring.git

@@ -1,5 +1,5 @@
 # ScyllaDB Tablets demo
-This ScyllaDB demo shows you how ScyllaDB handles 1M ops/sec workload while scaling out from 3 nodes to 6 nodes and back with tablets.
+This ScyllaDB demo shows you how ScyllaDB handles high workload while scaling out from 3 nodes to 6 nodes.
 
 ## Infrastructure elements
 * Amazon Web Services (AWS) EC2 instances

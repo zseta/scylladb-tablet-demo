@@ -119,9 +119,9 @@ resource "aws_security_group" "sg" {
   }
 
   tags = {
-    Name = "${var.custom_name}-SG"
-    "Project"   = "${var.custom_name}"
-    "Type" =  "SG"
+    Name      = "${var.custom_name}-SG"
+    "Project" = "${var.custom_name}"
+    "Type"    = "SG"
   }
 
 }

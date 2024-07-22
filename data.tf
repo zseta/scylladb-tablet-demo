@@ -16,5 +16,5 @@ data "aws_instances" "scylladb" {
   }
 }
 data "aws_vpc" "selected" {
-    id = aws_vpc.custom_vpc.id
+  id = aws_vpc.custom_vpc.id
 }

@@ -3,7 +3,7 @@
 
 resource "aws_instance" "loader_instance" {
   count           = var.loader_node_count
-  ami             = var.scylla_ami_id
+  ami             = var.loader_ami_id
   instance_type   = var.loader_instance_type
   subnet_id       = element(aws_subnet.public_subnet.*.id, count.index)
   security_groups = [aws_security_group.sg.id, ]
@@ -45,7 +45,7 @@ resource "aws_instance" "loader_instance" {
       "sudo chmod +x start.sh benchmark.sh",
       "echo '/home/scyllaadm/benchmark.sh' >> /home/scyllaadm/start.sh",
       "sudo mv /home/scyllaadm/cassandra-stress.service /etc/systemd/system/cassandra-stress.service ",
-      "sudo mv /home/scyllaadm/cassandra-stress-benchmark.service /etc/systemd/system/cassandra-stress-benchmark.service ", "sudo systemctl daemon-reload ",
+      "sudo mv /home/scyllaadm/cassandra-stress-benchmark.service /etc/systemd/system/cassandra-stress-benchmark.service ", #"sudo systemctl daemon-reload ",
       #"sudo systemctl start cassandra-stress.service",
     ]
   }
@@ -54,7 +54,7 @@ resource "aws_instance" "loader_instance" {
   # The coalesce function is used to select the public IP address of ScyllaDB Nodes.
   connection {
     type        = "ssh"
-    user        = "scyllaadm"
+    user        = var.instance_username
     private_key = file(var.ssh_private_key)
     host        = coalesce(self.public_ip, self.private_ip)
     agent       = true
@@ -67,8 +67,8 @@ resource "aws_instance" "loader_instance" {
 resource "aws_eip" "eip" {
   count            = length(aws_instance.loader_instance.*.id)               # Create an Elastic IP for each EC2 instance
   instance         = element(aws_instance.loader_instance.*.id, count.index) # Associate the Elastic IP with the current EC2 instance
-  public_ipv4_pool = "amazon"                                         # Use the Amazon pool for public IPv4 addresses
-  domain           = "vpc"                                            # Create a VPC Elastic IP address
+  public_ipv4_pool = "amazon"                                                # Use the Amazon pool for public IPv4 addresses
+  domain           = "vpc"                                                   # Create a VPC Elastic IP address
 
   tags = { # Add tags to the Elastic IP resource
     "Name" = "${var.custom_name}-EIP-${count.index}"
@@ -77,8 +77,8 @@ resource "aws_eip" "eip" {
 
 # Create EIP association with EC2 Instances
 resource "aws_eip_association" "eip_association" {
-  count         = length(aws_eip.eip)                              # Associate each Elastic IP with an EC2 instance
+  count         = length(aws_eip.eip)                                     # Associate each Elastic IP with an EC2 instance
   instance_id   = element(aws_instance.loader_instance.*.id, count.index) # Associate the current Elastic IP with the current EC2 instance
-  allocation_id = element(aws_eip.eip.*.id, count.index)           # Associate the current Elastic IP with the current allocation ID
+  allocation_id = element(aws_eip.eip.*.id, count.index)                  # Associate the current Elastic IP with the current allocation ID
 }
 
