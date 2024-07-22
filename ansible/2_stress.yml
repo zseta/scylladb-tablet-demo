@@ -1,0 +1,11 @@
+---
+- name: Start loader
+  hosts: stress
+  become: True
+
+  tasks: 
+    - name: Start Cassandra Stress
+      ansible.builtin.systemd_service:
+        name: cassandra-stress.service
+        state: started
+

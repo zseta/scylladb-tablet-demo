@@ -1,0 +1,10 @@
+[Unit]
+Description="Start Cassandra-stress to populate ScyllaDB"
+
+[Service]
+User=ubuntu
+WorkingDirectory=/home/ubuntu/
+ExecStart=/usr/bin/bash /home/ubuntu/start.sh
+Type=simple
+[Install]
+WantedBy=multi-user.target

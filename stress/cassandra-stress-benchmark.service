@@ -1,0 +1,13 @@
+[Unit]
+Description="Start Cassandra-stress to start Benchmarking ScyllaDB"
+#After=cassadra-stress.service
+
+[Service]
+User=ubuntu
+WorkingDirectory=/home/ubuntu/
+ExecStart=/usr/bin/bash /home/ubuntu/benchmark.sh
+Type=simple
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
